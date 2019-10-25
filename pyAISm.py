@@ -358,14 +358,15 @@ def format_course(course):
     return 'N/A' if course == 3600 else "{:3.1f}°".format(course).zfill(6) #with leading zeroes
 
 def format_speed(speed):
-    if speed == 1023:
-        return 'N/A'
-    elif speed == 1022:
-        return ' > 102 knots'
-    elif speed == 0:
-        return "0 knots"
-    else:
-        return "{0:.1f} knots".format(speed*0.1)
+    #if speed == 1023:
+        #return 'N/A'
+    #elif speed == 1022:
+        #return ' > 102 knots'
+    #elif speed == 0:
+        #return "0 knots"
+    #else:
+        #return "{0:.1f} knots".format(speed*0.1)
+    return speed*0.1
 
 def format_heading(heading):
     return 'N/A' if heading == 511 else "{:3.1f}°".format(heading).zfill(6) #with leading zeroes
