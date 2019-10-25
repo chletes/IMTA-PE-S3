@@ -1,0 +1,4 @@
+linea numero  6  :  !AIVDM,1,1,,B,33v5321001OwlG2LDDVFUGt20Dcr,0*2B
+{'type': 3, 'repeat': 0, 'mmsi': 266421000, 'status': 'At anchor', 'turn': 'N/A', 'speed': '0.1 knots', 'accuracy': '0', 'lon': '0°2\'23.0"W', 'lat': '49°29\'18.4"N', 'course': '168.5°', 'heading': '254.0°', 'second': 1, 'maneuver': 0, 'raim': '0', 'radio': 84730}
+####################
+

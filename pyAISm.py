@@ -312,8 +312,7 @@ def decod_ais(msg):
 
 
     if (compute_checksum(msg) != get_checksum(msg)):
-        logger.error('Checksum not valid (' + str(compute_checksum(msg)) + '!=' + str(
-            get_checksum(msg)) + '), message is broken/corrupted')
+        logger.error('Checksum not valid (' + str(compute_checksum(msg)) + '!=' + str(get_checksum(msg)) + '), message is broken/corrupted')
         raise BadChecksumError()
 
 
@@ -347,6 +346,7 @@ def format_coord(coord_dec,Dir=''):
     tmp = str(mnt).split('.')
     sec = float('0.'+tmp[1])*60
     return str(int(deg))+'°'+str(int(mnt))+"'"+str(sec)[:4]+'"'+Dir
+    #return coord_dec
 
 def format_lat(lat):
     return (format_coord(lat,'N') if lat > 0 else format_coord(lat,'S'))
@@ -614,8 +614,8 @@ def format_aid_type(aid_type):
     return aid_type_list[aid_type]
 
 format_list = {#list of all the key that can be formatted
-              'lat'      : format_lat,
-              'lon'      : format_lon,
+              #'lat'      : format_lat,
+              #'lon'      : format_lon,
               'course'   : format_course,
               'speed'    : format_speed,
               'heading'  : format_heading,
