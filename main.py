@@ -2,6 +2,7 @@ import pyAISm, json
 from geopy.distance import great_circle
 
 def get_parameters():
+	"""read the parameters (where to find json, etc.) and return them """
 	archivo_entrada_abierto = False
 	if not archivo_entrada_abierto:
 		try:
@@ -16,6 +17,9 @@ def get_parameters():
 	return config
 
 def find_transbordements(parametres, mensajes):
+	"""determine which ships may be doing a transhipment
+	return the corresponding list of ships and a list of all failed cases
+	"""
 	distance_maximale_km = parametres['TRANSBORDEMENTS'][0]['DISTANCE_MAXIMALE_KM']
 	vitesse_maximale_noeuds = parametres['TRANSBORDEMENTS'][0]['VITESSE_MAXIMALE_NOEUDS']
 	print("Possibles rendez-vous entre ", len(mensajes), " bateaux (à distance maximale de ", str(distance_maximale_km),"km et vitesse inferieure à ", str(vitesse_maximale_noeuds), " noeuds).")
@@ -41,6 +45,11 @@ def find_transbordements(parametres, mensajes):
 	return elementos, elementos_problematicos
 
 def decode(filename):
+	"""seperate the different AIS message into 2 lists :
+	mensajes123 which contains all messages about a ship movement
+	mensajes5 which contains all messages about a ship identification
+	return (mensajes123,mensajes5)
+	"""
 	archivo_entrada_abierto = False
 	cadena_vacia = ""
 	cadena_salt0 = "\n"
@@ -74,7 +83,11 @@ def decode(filename):
 	print('Le fichier avait ', str(len(mensajes123)), ' messages de type 1, 2, ou 3 , ', str(len(mensajes5)), 'messages de type 5 et ', str(lineas_malas), ' messages undécodables.\n')
 	return mensajes123,mensajes5
 
-
+##############################################################################
+#tests
+##############################################################################
 parametres=get_parameters()
 mensajes123, mensajes5 = decode(parametres["GENERAL"][0]["FICHIER"])
 elementos, elementos_problematicos = find_transbordements(parametres,mensajes123)
+#print(elementos)
+#print(mensajes123[5])
