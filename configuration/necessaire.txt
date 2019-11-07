@@ -2,3 +2,10 @@ sudo apt install python3-venv python3-pip
 sudo apt install curl
 sudo apt install python-pip
 pip install geopy
+
+WINDOWS 10
+
+- Install Python 3.8 from Windows Store
+- Run python on cmd to check if works
+- Run pip on cmd to check if works
+- Run pip install geopy
