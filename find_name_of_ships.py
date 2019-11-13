@@ -20,6 +20,24 @@ __version__ = 0.1
 __author__ = 'snal'
 
 import xlrd
+import json
+
+def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
+	"""export the types from the database into config.json"""
+	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
+							).sheet_by_index(0).col_values(4)])
+	json_file = open('./configuration/config.json','r')
+	config = json.load(json_file)
+	for t in types_u:
+		if t in config['TYPE_BATEAUX'].keys():
+			continue
+		else:
+			config['TYPE_BATEAUX'][t]=0	
+	json_file.close()
+	with open('./configuration/config.json', 'w') as outfile:
+		print(config['TYPE_BATEAUX'])
+		json.dump(config, outfile)
+	return None
 
 def import_database(path_of_the_database):
 	"""open the database and convert it to a dictionnary
@@ -44,7 +62,7 @@ def mmsi_in_database(mmsi):
 	"""look for the mmsi in teh database and return the type of the ship"""
 	book = xlrd.open_workbook('../ShipData.xlsx')
 	db = book.sheet_by_index(0)
-	list_of_all_mmsi = db.col()
+	list_of_all_mmsi = db.col(0)
 	try:
 		i = list_of_all_mmsi.index(mmsi)  # an exception may rise : ValueError
 		shiptype = db.col(4)
@@ -97,10 +115,11 @@ def search_mmsi(message):
 
 
 ##test
-print('bchsk')
-ma={'type': 1, 'repeat': 0, 'mmsi': 211506970, 'status': 'Under way using engine',
- 'turn': 'N/A', 'speed': '0.0', 'accuracy': '1', 'lon': 0.12568666666666667, 
- 'lat': 49.48391, 'course': '102.7°', 'heading': 'N/A', 'second': 19,
-  'maneuver': 1, 'raim': '1', 'radio': 49228}
-search_mmsi(ma)
-print('fdgxhcg')
+# print('bchsk')
+# ma={'type': 1, 'repeat': 0, 'mmsi': 211506970, 'status': 'Under way using engine',
+#  'turn': 'N/A', 'speed': '0.0', 'accuracy': '1', 'lon': 0.12568666666666667, 
+#  'lat': 49.48391, 'course': '102.7°', 'heading': 'N/A', 'second': 19,
+#   'maneuver': 1, 'raim': '1', 'radio': 49228}
+# #search_mmsi(ma)
+# print('fdgxhcg')
+export_types_json()
