@@ -6,14 +6,18 @@ Otherwise an error will be printed.
 In a future version it might be possible to look for the best matches (i.e.
 assuming there was a small mistake in the mmsi name and looking for the best
 correspondance)
+The code here is separated from main.py for a better management of the programm
 
+
+Betterments possible :
+ create a fonction which will be the interface with the database ?
 """
 
 #from __future__ import barry_as_FLUFL
 
 #__all__ = []
 __version__ = 0.1
-__author__ = snal
+__author__ = 'snal'
 
 import xlrd
 
@@ -42,7 +46,7 @@ def find_name_of_ships(list_of_mmsi):
 	A list is also returned which contained all mmsi which aren't registred in
 	the database.
 	"""
-	database_of_ships = import_database('specify the path of the database')
+	database_of_ships = import_database('../ShipData.xlsx')
 	# creating the dictionnary and the list returned
 	names_of_the_ships = {}
 	unknown_ships_mmsi = []
@@ -53,3 +57,41 @@ def find_name_of_ships(list_of_mmsi):
 		except:
 			unknown_ships_mmsi.append(mmsi)  # stocking unknown mmsi
 	return names_of_the_ships,unknown_ships_mmsi
+
+
+def search_mmsi(message):
+	"""add the type of the ship to the message if the mmse is in the database
+	return true if operation is successful, false otherwise
+	"""
+	print('beginning of the search')
+	database_of_ships = import_database('../ShipData.xlsx')
+	print('database ok')
+	all_searched_mmsi = {}  # reduce memory programm complexity
+	if (message['mmsi'] in all_searched_mmsi.keys()):
+		print('known mmsi')
+		# case where we've already searched for this mmsi
+		message['type']=all_searched_mmsi[message['mmsi']]
+		return True
+	else:
+		print('unknown mmsi')
+		# 2nd case : first time encounter with this mmsi
+		try:
+			# searching in the database
+			type_of_the_ship = database_of_ships[message['mmsi']]
+			print('search : success')
+			all_searched_mmsi[message['mmsi']]=type_of_the_ship
+			message['type']=type_of_the_ship
+			return True
+		except:  # the search was a failure
+			print('search : failure')
+			return False
+
+
+##test
+print('bchsk')
+ma={'type': 1, 'repeat': 0, 'mmsi': 211506970, 'status': 'Under way using engine',
+ 'turn': 'N/A', 'speed': '0.0', 'accuracy': '1', 'lon': 0.12568666666666667, 
+ 'lat': 49.48391, 'course': '102.7°', 'heading': 'N/A', 'second': 19,
+  'maneuver': 1, 'raim': '1', 'radio': 49228}
+search_mmsi(ma)
+print('fdgxhcg')
