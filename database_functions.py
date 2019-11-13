@@ -22,7 +22,8 @@ __author__ = 'snal'
 import xlrd
 import json
 
-def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
+#def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
+def export_types_json(path_of_the_database):
 	"""export the types from the database into config.json"""
 	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
 							).sheet_by_index(0).col_values(4)])
@@ -35,7 +36,7 @@ def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
 			config['TYPE_BATEAUX'][t]=0	
 	json_file.close()
 	with open('./configuration/config.json', 'w') as outfile:
-		print(config['TYPE_BATEAUX'])
+		#print(config['TYPE_BATEAUX'])
 		json.dump(config, outfile)
 	return None
 
@@ -122,4 +123,4 @@ def search_mmsi(message):
 #   'maneuver': 1, 'raim': '1', 'radio': 49228}
 # #search_mmsi(ma)
 # print('fdgxhcg')
-export_types_json()
+#export_types_json()

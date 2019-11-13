@@ -4,6 +4,7 @@ import pyAISm
 from decode import decode
 from find_possible_transbordements import find_transbordements
 from json_lire import lecture_fichier_configuration
+from database_functions import export_types_json
 
 def get_parameters():
 	"""read the parameters (where to find json, etc.) and return them """
@@ -52,7 +53,8 @@ def first_function():
 					break
 				if choix == 1:
 					#Mise a jour des types de bateaux
-					print("choix 1")
+					export_types_json(parametres['GENERAL'][0]['DATABASE'])
+
 				if choix == 2:
 					#Accede au fichier de configuration
 					lecture_fichier_configuration()
