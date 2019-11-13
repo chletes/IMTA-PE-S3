@@ -1,5 +1,7 @@
-import pyAISm, json
+import json, os
 from geopy.distance import great_circle
+import pyAISm
+from decode import decode
 
 def get_parameters():
 	"""read the parameters (where to find json, etc.) and return them """
@@ -54,7 +56,15 @@ def find_transbordements(parametres, mensajes):
 #tests
 ##############################################################################
 parametres=get_parameters()
-mensajes123, mensajes5 = decode(parametres["GENERAL"][0]["FICHIER"])
-elementos, elementos_problematicos = find_transbordements(parametres,mensajes123)
+mensajes123 = [];
+mensajes5 = [];
+path = parametres['GENERAL'][0]['PATH']
+#for filename in glob.glob(os.path.join(path, '*.txt')):# pour lire tous les fichiers qui finisent par .txt
+for filename in os.listdir(path):
+	print(filename)
+	real_filename = path + '/' + filename
+	decode(real_filename, mensajes123, mensajes5)
+
+#elementos, elementos_problematicos = find_transbordements(parametres,mensajes123)
 #print(elementos)
 #print(mensajes123[5])

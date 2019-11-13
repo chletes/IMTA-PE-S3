@@ -5,15 +5,15 @@ from datetime import datetime
 
 
 lineas_malas = 0
-mensajes123 = []
-mensajes5 = []
-def decode(filename):
+#mensajes123 = []
+#mensajes5 = []
+def decode(filename, mensajes123, mensajes5):
     archivo_entrada_abierto = False
     cadena_vacia = ""
     cadena_salt0 = "\n"
     lineas_malas = 0
-    mensajes123 = []
-    mensajes5 = []
+    #mensajes123 = []
+    #mensajes5 = []
     timestampArray = [];
 
     if not archivo_entrada_abierto:
@@ -37,7 +37,7 @@ def decode(filename):
                             ais_data=pyAISm.decod_ais(linea)
                             ais_data=pyAISm.format_ais(ais_data)
                             ais_data['Timestamp'] = timestamp
-                            print(ais_data)
+                            #print(ais_data)
                             if str(ais_data['type']) == '1' or str(ais_data['type']) == '2' or str(ais_data['type']) == '3':
                                 mensajes123.append(ais_data)
                             if str(ais_data['type']) == '5':
@@ -48,6 +48,6 @@ def decode(filename):
                 linea = archivo.readline()
             archivo.close()
         except IOError:
-			print('Error en apertura de archivo ', filename)
-	print('Le fichier avait ', str(len(mensajes123)), ' messages de type 1, 2, ou 3 , ', str(len(mensajes5)), 'messages de type 5 et ', str(lineas_malas), ' messages undécodables.\n')
-	return mensajes123,mensajes5
+            print('Error en apertura de archivo ', filename)
+    print('Le fichier avait ', str(len(mensajes123)), ' messages de type 1, 2, ou 3 , ', str(len(mensajes5)), 'messages de type 5 et ', str(lineas_malas), ' messages undécodables.\n')
+    return 0#mensajes123,mensajes5
