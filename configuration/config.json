@@ -1,1 +1,22 @@
-{"TYPE_BATEAUX": {"Tug": 1, "Crew/Supply Vessel": 0, "Yacht (Sailing)": 0, "Diving Support Vessel": 0, "Yacht": 0, "Fishing Vessel": 0, "Utility Vessel": 0}, "TRANSBORDEMENTS": [{"VITESSE_MAXIMALE_NOEUDS": 10, "DISTANCE_MAXIMALE_KM": 10}]}
+{
+  "TYPE_BATEAUX": {
+    "Tug": 1,
+    "Crew/Supply Vessel": 0,
+    "Yacht (Sailing)": 0,
+    "Diving Support Vessel": 0,
+    "Yacht": 0,
+    "Fishing Vessel": 0,
+    "Utility Vessel": 0
+  },
+  "TRANSBORDEMENTS": [
+    {
+      "VITESSE_MAXIMALE_NOEUDS": 10,
+      "DISTANCE_MAXIMALE_KM": 10
+    }
+  ],
+  "GÉNÉRAL": [
+    {
+      "PATH": "\"/../ais_rie_cerema_plouzane/\""
+    }
+  ]
+}
