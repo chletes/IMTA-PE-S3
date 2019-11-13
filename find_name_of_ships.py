@@ -40,6 +40,19 @@ def import_database(path_of_the_database):
 	    data.append(elm)
 	return data
 
+def mmsi_in_database(mmsi):
+	"""look for the mmsi in teh database and return the type of the ship"""
+	book = xlrd.open_workbook('../ShipData.xlsx')
+	db = book.sheet_by_index(0)
+	list_of_all_mmsi = db.col()
+	try:
+		i = list_of_all_mmsi.index(mmsi)  # an exception may rise : ValueError
+		shiptype = db.col(4)
+		return shiptype[i]
+	except:
+		return False
+
+
 def find_name_of_ships(list_of_mmsi):
 	"""find the name of all corresponding ships by using there mmsi
 	return a dictionnary with the mmsi as key and the name
@@ -63,26 +76,22 @@ def search_mmsi(message):
 	"""add the type of the ship to the message if the mmse is in the database
 	return true if operation is successful, false otherwise
 	"""
-	print('beginning of the search')
-	database_of_ships = import_database('../ShipData.xlsx')
-	print('database ok')
 	all_searched_mmsi = {}  # reduce memory programm complexity
 	if (message['mmsi'] in all_searched_mmsi.keys()):
 		print('known mmsi')
 		# case where we've already searched for this mmsi
 		message['type']=all_searched_mmsi[message['mmsi']]
 		return True
-	else:
+	else:  # 2nd case : first time encounter with this mmsi
 		print('unknown mmsi')
-		# 2nd case : first time encounter with this mmsi
-		try:
-			# searching in the database
-			type_of_the_ship = database_of_ships[message['mmsi']]
+		# searching in the database
+		type_of_the_ship = mmsi_in_database('mmsi')
+		if type_of_the_ship:
 			print('search : success')
 			all_searched_mmsi[message['mmsi']]=type_of_the_ship
 			message['type']=type_of_the_ship
 			return True
-		except:  # the search was a failure
+		else:
 			print('search : failure')
 			return False
 
