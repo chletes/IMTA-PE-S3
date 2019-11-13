@@ -1,1 +1,1 @@
-{"GENERAL":[{"FICHIER":"../prueba2.txt", "PATH":"../ais_rie_cerema_plouzane/"}],"TRANSBORDEMENTS": [{"DISTANCE_MAXIMALE_KM": 1, "VITESSE_MAXIMALE_NOEUDS": 10}], "BATEAUX": [{"TYPE": "Fishing"}]}
+{"GENERAL":[{"FICHIER":"../prueba2.txt", "PATH":"../ais_rie_cerema_plouzane/"}],"TRANSBORDEMENTS": [{"DISTANCE_MAXIMALE_KM": 1, "VITESSE_MAXIMALE_NOEUDS": 10}], "BATEAUX": [{"TYPE": "Fish Carrier"}]}

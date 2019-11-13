@@ -41,6 +41,7 @@ def decode(filename, mensajes123, mensajes5):
                             if str(ais_data['type']) == '1' or str(ais_data['type']) == '2' or str(ais_data['type']) == '3':
                                 mensajes123.append(ais_data)
                             if str(ais_data['type']) == '5':
+
                                 mensajes5.append(ais_data)
                         except:
                             lineas_malas = lineas_malas + 1
@@ -49,5 +50,5 @@ def decode(filename, mensajes123, mensajes5):
             archivo.close()
         except IOError:
             print('Error en apertura de archivo ', filename)
-    print('Le fichier avait ', str(len(mensajes123)), ' messages de type 1, 2, ou 3 , ', str(len(mensajes5)), 'messages de type 5 et ', str(lineas_malas), ' messages undécodables.\n')
-    return 0#mensajes123,mensajes5
+    #print('Le fichier avait ', str(len(mensajes123)), ' messages de type 1, 2, ou 3 , ', str(len(mensajes5)), 'messages de type 5 et ', str(lineas_malas), ' messages undécodables.\n')
+    return len(mensajes123), len(mensajes5), lineas_malas

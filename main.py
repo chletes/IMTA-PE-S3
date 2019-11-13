@@ -2,6 +2,8 @@ import json, os
 from geopy.distance import great_circle
 import pyAISm
 from decode import decode
+from find_possible_transbordements import find_transbordements
+from json_lire import lecture_fichier_configuration
 
 def get_parameters():
 	"""read the parameters (where to find json, etc.) and return them """
@@ -18,53 +20,55 @@ def get_parameters():
 			print("Error en el fichero de configuracion")
 	return config
 
-def find_transbordements(parametres, mensajes):
-	"""determine which ships may be doing a transhipment
-	return the corresponding list of ships and a list of all failed cases
+def first_function():
+	"""Choix de l'utilisateur.
+		1. On retrouve de la base de données "ShipData" tous les types de bateux. Puis on demande à l'utilisateur si ses choix sont
+			faits.
+		2. On accede au fichier de configuration pour changer les parametres de recherche des transbordements (path, vitesse maximale, 
+			distance entre deux bateaux maximale, etc.)
+		3. On lance le programme. 
 	"""
-	distance_maximale_km = parametres['TRANSBORDEMENTS'][0]['DISTANCE_MAXIMALE_KM']
-	vitesse_maximale_noeuds = parametres['TRANSBORDEMENTS'][0]['VITESSE_MAXIMALE_NOEUDS']
-	deltaTS_maximale = parametres['TRANSBORDEMENTS'][0]['DELTATS_MAXIMALE']
-	types_de_bateaux = parametres['BATEAUX'][0]['TYPE']
-	#print(types_de_bateaux)
-	print("Possibles rendez-vous entre ", len(mensajes), " bateaux (à distance maximale de ", str(distance_maximale_km),"km et vitesse inferieure à ", str(vitesse_maximale_noeuds), " noeuds).")
-	print(" {:-<76}".format(''))
-	print("|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|".format('Message A', 'Bateau A', 'vitesse A', 'Message B', 'Bateau B', 'vitesse B', 'distance'))
-	print(" {:-<76}".format(''))
-	elementos = []
-	elementos_problematicos = []
-	num_mensajes = len(mensajes)
-	for x in range(0, num_mensajes):
-		for y in range(x+1, num_mensajes):
-			valladolid = (mensajes[x]['lon'], mensajes[x]['lat'])
-			salamanca = (mensajes[y]['lon'], mensajes[y]['lat'])
-			try:
-				distance = great_circle(valladolid, salamanca).km
-				if (float(distance) <= float(distance_maximale_km)):
-					if ((float(mensajes[x]['speed']) <= float(vitesse_maximale_noeuds)) and (float(mensajes[y]['speed']) <= float(vitesse_maximale_noeuds))):
-						deltaTS = abs(mensajes[x]['Timestamp']-mensajes[y]['Timestamp'])/60000
-						if (deltaTS <= deltaTS_maximale):
-							elementos.append((mensajes[x], mensajes[y], distance,deltaTS))
-							print("|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10.2f}|".format(x, mensajes[x]['mmsi'], mensajes[x]['speed'], y, mensajes[y]['mmsi'], mensajes[y]['speed'], distance ))
-							print(" {:-<76}".format(''))
-			except:
-				elementos_problematicos.append((mensajes[x], mensajes[y]))
-	return elementos, elementos_problematicos
-
-
+	print("Bienvenu à notre logiciel!")
+	print("")
+	possibles_choix = {	1:"Mettre a jour les types de bateaux. ", 
+						2:"Acceder au fichier de configuration. ",
+						3:"Chercher les possibles transbordements. "}
+	for q, a in possibles_choix.items():
+		print('{0}. {1}'.format(q, a))
+	print("")
+	choix = 0;
+	while choix == 0:
+		try:
+			choix = int(input("Entrez votre décision: "))
+			if choix not in [1, 2, 3]:
+				print ("Choix incorrect !")
+				choix = 0
+			else:
+				print('Choix fait: {0}'.format(possibles_choix[choix]))
+		except ValueError :
+			print("Choix incorrect ! Saisisez un numero aussi!")
+	return choix
 ##############################################################################
 #tests
 ##############################################################################
 parametres=get_parameters()
-mensajes123 = [];
-mensajes5 = [];
-path = parametres['GENERAL'][0]['PATH']
-#for filename in glob.glob(os.path.join(path, '*.txt')):# pour lire tous les fichiers qui finisent par .txt
-for filename in os.listdir(path):
-	print(filename)
-	real_filename = path + '/' + filename
-	decode(real_filename, mensajes123, mensajes5)
 
-#elementos, elementos_problematicos = find_transbordements(parametres,mensajes123)
-#print(elementos)
-#print(mensajes123[5])
+choix = first_function()
+if choix == 1:
+	#Mise a jour des types de bateaux
+	print("choix 1")
+if choix == 2:
+	#Accede au fichier de configuration
+	lecture_fichier_configuration()
+	#print("choix 2")
+if choix == 3:
+	#Chercher les possibles transbordements
+	mensajes123 = [];
+	mensajes5 = [];
+	path = parametres['GENERAL'][0]['PATH']
+	#for filename in glob.glob(os.path.join(path, '*.txt')):# pour lire tous les fichiers qui finisent par .txt
+	for filename in os.listdir(path):
+		#print(filename)
+		real_filename = path + '/' + filename
+		n_mensajes123, n_mensajes5, n_lineas_malas = decode(real_filename, mensajes123, mensajes5)
+	print('Les fichiers avaient {0} messages de type 1, 2, ou 3 , {1} messages de type 5 et {2} messages undécodables.'.format(n_mensajes123, n_mensajes5, n_lineas_malas))
