@@ -1,5 +1,4 @@
 import json, os
-from geopy.distance import great_circle
 import pyAISm
 from decode import decode
 from find_possible_transbordements import find_transbordements
@@ -58,7 +57,7 @@ def first_function():
 				if choix == 2:
 					#Accede au fichier de configuration
 					lecture_fichier_configuration()
-					#print("choix 2")
+					
 				if choix == 3:
 					#Chercher les possibles transbordements
 					mensajes123 = [];
@@ -66,18 +65,19 @@ def first_function():
 					path = parametres['GENERAL'][0]['PATH']
 					#for filename in glob.glob(os.path.join(path, '*.txt')):# pour lire tous les fichiers qui finisent par .txt
 					for filename in os.listdir(path):
-						#print(filename)
 						real_filename = path + '/' + filename
 						n_mensajes123, n_mensajes5, n_lineas_malas = decode(real_filename, mensajes123, mensajes5)
 					print('Les fichiers avaient {0} messages de type 1, 2, ou 3 , {1} messages de type 5 et {2} messages undécodables.'.format(n_mensajes123, n_mensajes5, n_lineas_malas))
+					elements, elements_problematiques = find_transbordements(parametres, mensajes123)
+					
 		except ValueError :
 			print("Choix incorrect ! Saisisez un numero aussi!")
 	 
 ##############################################################################
 #tests
 ##############################################################################
-parametres ={}
-parametres=get_parameters()
+parametres = {}
+parametres = get_parameters()
 
 if parametres != {}:
 	first_function()
