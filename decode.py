@@ -1,5 +1,11 @@
-# coding=utf-8
-import pyAISm, json
+"""Decode the AIS messages
+
+The following function only keep the AIS messages usefull for the analysis of
+the software, i.e. any message beginning with PAS ANALYSE isn't taken
+"""
+
+import json
+import pyAISm
 from geopy.distance import great_circle
 from datetime import datetime
 

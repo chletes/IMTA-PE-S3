@@ -1,5 +1,18 @@
-import json, os
+"""Run this file to launch the software
+
+The current version works using a terminal. It should work under all OS.
+The file necessaire.txt contains all instructions to install specific libraries
+that are needed in the software.
+"""
+
+__version__ = '0.1'
+__author__ = ''
+
+# libraries
+import os
+import json
 from geopy.distance import great_circle
+# files needed for the software
 import pyAISm
 from decode import decode
 from find_possible_transbordements import find_transbordements
@@ -9,7 +22,7 @@ from database_functions import export_types_json
 def get_parameters():
 	"""read the parameters (where to find json, etc.) and return them """
 	archivo_entrada_abierto = False
-	config = {}
+	config = {}  # will contain the content of config.json deserialized
 	if not archivo_entrada_abierto:
 		try:
 			with open('./configuration/config.json') as json_file:
@@ -24,13 +37,13 @@ def get_parameters():
 
 def first_function():
 	"""Choix de l'utilisateur.
-		1. On retrouve de la base de données "ShipData" tous les types de bateux. Puis on demande à l'utilisateur si ses choix sont
-			faits.
-		2. On accede au fichier de configuration pour changer les parametres de recherche des transbordements (path, vitesse maximale, 
-			distance entre deux bateaux maximale, etc.)
-		3. On lance le programme. 
+		1. Retrouve dans la base de données "ShipData" tous les types de bateaux
+		   Puis demande à l'utilisateur si ses choix  de types sont	faits.
+		2. Accede au fichier de configuration pour changer les paramètres de 
+		   recherche des transbordements (chemins d'accès, vitesse maximale,
+		   distance maximale entre deux bateaux, etc.)
+		3. Lance le programme. 
 	"""
-	
 	choix = 0;
 	while 1:
 		print("\nBienvenu à notre logiciel!")
@@ -81,5 +94,3 @@ parametres=get_parameters()
 
 if parametres != {}:
 	first_function()
-	
-		
