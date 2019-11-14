@@ -1,32 +1,50 @@
-"""This fill search for the names of ships
+"""This fill contains all functions related to the database
 
-To find the corresponding names, only the mmsi is required. The programm will
-automatically find the corresponding names in the database if it exists.
-Otherwise an error will be printed.
-In a future version it might be possible to look for the best matches (i.e.
-assuming there was a small mistake in the mmsi name and looking for the best
-correspondance)
-The code here is separated from main.py for a better management of the programm
+The most important one for the software is export_types_json() :
+this function allowed to update the existing types of ships in config.json
+and thus allowed the software to work properly (given that the user has
+selected the types he wanted for the search)
+2 libraries are used : 
+- xlrd, to read the database which is a .xlsx file (Excel),
+- json, for all treatments of config.json.
+See the respective documentations if necessary.
 
+There are 3 different functions looking for the type of the ships
+Use export_type_json if you want to update types in the config.json file
+Use search_mmsi(message) if you want to add the type of the ship to message
+Use mmsi_in_database(mmsi) if you want to get the type of a ship given its mmsi
 
-Betterments possible :
- create a fonction which will be the interface with the database ?
+The last functon looks for the names of ships, given a list of mmsi (usefull if
+used in conjonction with type 5 AIS message to verify if the name is correct)
+
+The following assumptions are made for the database 
+it's a .xlsx file with one sheet
+the first colonn contains the mmsi
+the third one, the names
+the fifth one, the types
+If it's modified in the database, modifify the global variables in accordance
+with those changes.
+
 """
 
-#from __future__ import barry_as_FLUFL
-
-#__all__ = []
-__version__ = 0.1
+__version__ = 0.2
 __author__ = 'snal'
 
 import xlrd
 import json
 
+all_searched_mmsi = {}  # reduce memory programm complexity for search_mmsi()
+						# by stocking all already searched mmsi : 
+						# key : mmsi, value : type of the ship
+index_col_mmsi = 0
+index_col_name = 2
+index_col_type = 4
+
 #def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
 def export_types_json(path_of_the_database):
 	"""export the types from the database into config.json"""
 	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
-							).sheet_by_index(0).col_values(4)])
+							).sheet_by_index(0).col_values(index_col_type)])
 	json_file = open('./configuration/config.json','r')
 	config = json.load(json_file)
 	for t in types_u:
@@ -40,37 +58,43 @@ def export_types_json(path_of_the_database):
 		json.dump(config, outfile)
 	return None
 
-def import_database(path_of_the_database):
-	"""open the database and convert it to a dictionnary
-	return the dictionnary
+def search_mmsi(message):
+	"""add the type of the ship to the message if the mmsi is in the database
+	return true if operation is successful, false otherwise
 	"""
-	workbook = xlrd.open_workbook(path_of_the_database)
-	workbook = xlrd.open_workbook(path_of_the_database, on_demand = True)
-	worksheet = workbook.sheet_by_index(0)
-	first_row = [] # The row where we stock the name of the column
-	for col in range(worksheet.ncols):
-	    first_row.append( worksheet.cell_value(0,col) )
-	# tronsform the workbook to a list of dictionnary
-	data =[]
-	for row in range(1, worksheet.nrows):
-	    elm = {}
-	    for col in range(worksheet.ncols):
-	        elm[first_row[col]]=worksheet.cell_value(row,col)
-	    data.append(elm)
-	return data
+	# the global dictionnary all_searched_mmsi is used here
+	#first we checked whether we've already searched for the current mmsi
+	if (message['mmsi'] in all_searched_mmsi.keys()):
+		message['type']=all_searched_mmsi[message['mmsi']]
+		return True
+	else:  # otherwise it's the first encounter with this mmsi
+		# extract information from the database
+		database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
+								).sheet_by_index(0).col_values(index_col_mmsi)]
+		database_type = [t for t in xlrd.open_workbook(path_of_the_database
+								).sheet_by_index(0).col_values(index_col_type)]
+		# search for the mmsi in the database
+		try:
+			type_of_the_ship = database_type[database_mmsi.index(mmsi)]
+			all_searched_mmsi[message['mmsi']]=type_of_the_ship
+			message['type']=type_of_the_ship
+			return True
+		except:  # if a ValueError exception is raised (i.e. no mmsi found)
+			return False
 
 def mmsi_in_database(mmsi):
-	"""look for the mmsi in teh database and return the type of the ship"""
+	"""look for the mmsi in the database and return the type of the ship
+	If the search was unsuccessful, return False
+	"""
 	book = xlrd.open_workbook('../ShipData.xlsx')
 	db = book.sheet_by_index(0)
-	list_of_all_mmsi = db.col(0)
+	list_of_all_mmsi = db.col(index_col_mmsi)
 	try:
 		i = list_of_all_mmsi.index(mmsi)  # an exception may rise : ValueError
-		shiptype = db.col(4)
+		shiptype = db.col(index_col_type)
 		return shiptype[i]
 	except:
 		return False
-
 
 def find_name_of_ships(list_of_mmsi):
 	"""find the name of all corresponding ships by using there mmsi
@@ -78,49 +102,21 @@ def find_name_of_ships(list_of_mmsi):
 	A list is also returned which contained all mmsi which aren't registred in
 	the database.
 	"""
-	database_of_ships = import_database('../ShipData.xlsx')
+	# only mmsi and names of ships are usefull here
+	database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
+							).sheet_by_index(0).col_values(index_col_mmsi)]
+	database_name = [t for t in xlrd.open_workbook(path_of_the_database
+							).sheet_by_index(0).col_values(index_col_name)]
 	# creating the dictionnary and the list returned
 	names_of_the_ships = {}
 	unknown_ships_mmsi = []
 	# looking for the names of the ships
 	for mmsi in list_of_mmsi:
-		try:
-			names_of_the_ships[mmsi] = database_of_ships[mmsi]  # should not work yet
+		try:  
+			names_of_the_ships[mmsi] = database_name[database_mmsi.index(
+																		mmsi)]
+			# index() raises a ValueError exception when no element correspon
+			# -ding to mmsi is found
 		except:
-			unknown_ships_mmsi.append(mmsi)  # stocking unknown mmsi
+			unknown_ships_mmsi.append(mmsi)
 	return names_of_the_ships,unknown_ships_mmsi
-
-
-def search_mmsi(message):
-	"""add the type of the ship to the message if the mmse is in the database
-	return true if operation is successful, false otherwise
-	"""
-	all_searched_mmsi = {}  # reduce memory programm complexity
-	if (message['mmsi'] in all_searched_mmsi.keys()):
-		print('known mmsi')
-		# case where we've already searched for this mmsi
-		message['type']=all_searched_mmsi[message['mmsi']]
-		return True
-	else:  # 2nd case : first time encounter with this mmsi
-		print('unknown mmsi')
-		# searching in the database
-		type_of_the_ship = mmsi_in_database('mmsi')
-		if type_of_the_ship:
-			print('search : success')
-			all_searched_mmsi[message['mmsi']]=type_of_the_ship
-			message['type']=type_of_the_ship
-			return True
-		else:
-			print('search : failure')
-			return False
-
-
-##test
-# print('bchsk')
-# ma={'type': 1, 'repeat': 0, 'mmsi': 211506970, 'status': 'Under way using engine',
-#  'turn': 'N/A', 'speed': '0.0', 'accuracy': '1', 'lon': 0.12568666666666667, 
-#  'lat': 49.48391, 'course': '102.7°', 'heading': 'N/A', 'second': 19,
-#   'maneuver': 1, 'raim': '1', 'radio': 49228}
-# #search_mmsi(ma)
-# print('fdgxhcg')
-#export_types_json()

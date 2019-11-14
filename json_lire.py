@@ -1,3 +1,9 @@
+"""Read the configuration file
+"""
+
+__version__ = '0.1'
+__author__ = ''
+
 import json
 
 def lecture_fichier_configuration():
