@@ -25,8 +25,8 @@ def find_transbordements(parametres, messages):
 	#print(" {:-<76}".format(''))
 	#print("|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|".format('Message A', 'Bateau A', 'vitesse A', 'Message B', 'Bateau B', 'vitesse B', 'distance'))
 	#print(" {:-<76}".format(''))
-	elements = []
-	elements_problematiques = []
+	#elements = []
+	#elements_problematiques = []
 	all_possible_transbordements = []
 	num_messages = len(messages)
 	for x in range(0, num_messages):
@@ -40,25 +40,33 @@ def find_transbordements(parametres, messages):
 					deltaTS = abs(messages[x]['Timestamp']-messages[y]['Timestamp'])/60000
 					if ((float(distance) <= float(distance_maximale_km)) and (deltaTS < deltaTS_maximale)):
 						if ((float(messages[x]['speed']) <= float(vitesse_maximale_noeuds)) and (float(messages[y]['speed']) <= float(vitesse_maximale_noeuds))):
-							elements.append((messages[x], messages[y], distance,deltaTS))
+							#elements.append((messages[x], messages[y], distance,deltaTS))
 							possibles_transbordements_avec_LE_message.append((messages[y]['mmsi']))
 							check, index = check_in_all_possible_transbordements(all_possible_transbordements, messages[x]['mmsi'], messages[y]['mmsi'])
 							if check == False:
-								all_possible_transbordements.append((messages[x]['mmsi'], messages[y]['mmsi'], [[distance, deltaTS]]))
+								all_possible_transbordements.append(([messages[x]['mmsi']], [messages[y]['mmsi']], [[distance, deltaTS]]))
 							else:
 								all_possible_transbordements[index][2].append(([distance, deltaTS]))
-
 							#print(possibles_transbordements_avec_LE_message)
 							#print("|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10}|{:^10.2f}|".format(x, messages[x]['mmsi'], messages[x]['speed'], y, messages[y]['mmsi'], messages[y]['speed'], distance ))
 							#print(" {:-<76}".format(''))
 			except:
 				#elements_problematiques.append((messages[x], messages[y]))
 				pass
-	print(len(all_possible_transbordements))
-	print(len(all_possible_transbordements[0][2]))
-	print(all_possible_transbordements[0])
+	#print(len(all_possible_transbordements)) #nombre de transbordements
+	#print(len(all_possible_transbordements[0][2])) #nombre de message dans le premier transbordement
+	#print(all_possible_transbordements[0])
 		#if len(possibles_transbordements_avec_LE_message) != 0:
 			#print("possibles transbordement avec le message {0}: {1}.\n".format(x, len(possibles_transbordements_avec_LE_message)))
-	print("possibles transbordements total: {0}".format(len(elements)))
-	return elements, elements_problematiques
+	
+	return all_possible_transbordements
+
+def find_mmsi_in_message_type_5(transbordement_couple, messages_type5):
+	for x in messages_type5:
+		if x['mmsi'] == transbordement_couple[0][0]:
+			transbordement_couple[0][0].append(x['shiptype'])
+		if x['mmsi'] == transbordement_couple[1][0]:
+			transbordement_couple[1][0].append(x['shiptype'])
+		
+
 

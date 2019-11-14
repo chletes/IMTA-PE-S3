@@ -58,7 +58,7 @@ def export_types_json(path_of_the_database):
 		json.dump(config, outfile)
 	return None
 
-def search_mmsi(message):
+def search_mmsi(message, path_of_the_database):
 	"""add the type of the ship to the message if the mmsi is in the database
 	return true if operation is successful, false otherwise
 	"""
@@ -80,7 +80,9 @@ def search_mmsi(message):
 			message['type']=type_of_the_ship
 			return True
 		except:  # if a ValueError exception is raised (i.e. no mmsi found)
+			message['type']="None"
 			return False
+
 
 def mmsi_in_database(mmsi):
 	"""look for the mmsi in the database and return the type of the ship
@@ -96,7 +98,7 @@ def mmsi_in_database(mmsi):
 	except:
 		return False
 
-def find_name_of_ships(list_of_mmsi):
+def find_name_of_ships(list_of_mmsi, path_of_the_database):
 	"""find the name of all corresponding ships by using there mmsi
 	return a dictionnary with the mmsi as key and the name
 	A list is also returned which contained all mmsi which aren't registred in

@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import json, os
-=======
 """Run this file to launch the software
 
 The current version works using a terminal. It should work under all OS.
@@ -16,12 +13,12 @@ import os
 import json
 from geopy.distance import great_circle
 # files needed for the software
->>>>>>> f5ae2152d9a0f232a543fb38a5e82c2bbe82c5c0
+###### f5ae2152d9a0f232a543fb38a5e82c2bbe82c5c0
 import pyAISm
 from decode import decode
-from find_possible_transbordements import find_transbordements
+from find_possible_transbordements import find_transbordements, find_mmsi_in_message_type_5
 from json_lire import lecture_fichier_configuration
-from database_functions import export_types_json
+from database_functions import export_types_json, search_mmsi
 
 def get_parameters():
 	"""read the parameters (where to find json, etc.) and return them """
@@ -74,7 +71,7 @@ def first_function():
 
 				if choix == 2:
 					#Accede au fichier de configuration
-					lecture_fichier_configuration()
+					lecture_fichier_configuration(parametres['GENERAL'][0]['TEXT_EDITOR'], './configuration/config.json')
 					
 				if choix == 3:
 					#Chercher les possibles transbordements
@@ -86,8 +83,7 @@ def first_function():
 						real_filename = path + '/' + filename
 						n_mensajes123, n_mensajes5, n_lineas_malas = decode(real_filename, mensajes123, mensajes5)
 					print('Les fichiers avaient {0} messages de type 1, 2, ou 3 , {1} messages de type 5 et {2} messages undécodables.'.format(n_mensajes123, n_mensajes5, n_lineas_malas))
-					elements, elements_problematiques = find_transbordements(parametres, mensajes123)
-					
+					possibles_transbordements = find_transbordements(parametres, mensajes123)
 		except ValueError :
 			print("Choix incorrect ! Saisisez un numero aussi!")
 	 
