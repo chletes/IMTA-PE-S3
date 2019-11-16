@@ -4,7 +4,7 @@ The most important one for the software is export_types_json() :
 this function allowed to update the existing types of ships in config.json
 and thus allowed the software to work properly (given that the user has
 selected the types he wanted for the search)
-2 libraries are used : 
+2 libraries are used :
 - xlrd, to read the database which is a .xlsx file (Excel),
 - json, for all treatments of config.json.
 See the respective documentations if necessary.
@@ -17,7 +17,7 @@ Use mmsi_in_database(mmsi) if you want to get the type of a ship given its mmsi
 The last functon looks for the names of ships, given a list of mmsi (usefull if
 used in conjonction with type 5 AIS message to verify if the name is correct)
 
-The following assumptions are made for the database 
+The following assumptions are made for the database
 it's a .xlsx file with one sheet
 the first colonn contains the mmsi
 the third one, the names
@@ -32,11 +32,11 @@ __author__ = 'snal'
 
 import xlrd
 import json
-
+import time
 all_searched_mmsi = {}  # reduce memory programm complexity for search_mmsi()
-						# by stocking all already searched mmsi : 
+						# by stocking all already searched mmsi :
 						# key : mmsi, value : type of the ship
-index_col_mmsi = 0
+index_col_mmsi = 1
 index_col_name = 2
 index_col_type = 4
 
@@ -51,7 +51,7 @@ def export_types_json(path_of_the_database):
 		if t in config['TYPE_BATEAUX'].keys():
 			continue
 		else:
-			config['TYPE_BATEAUX'][t]=0	
+			config['TYPE_BATEAUX'][t]=0
 	json_file.close()
 	with open('./configuration/config.json', 'w') as outfile:
 		#print(config['TYPE_BATEAUX'])
@@ -114,7 +114,7 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 	unknown_ships_mmsi = []
 	# looking for the names of the ships
 	for mmsi in list_of_mmsi:
-		try:  
+		try:
 			names_of_the_ships[mmsi] = database_name[database_mmsi.index(
 																		mmsi)]
 			# index() raises a ValueError exception when no element correspon
@@ -122,3 +122,22 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 		except:
 			unknown_ships_mmsi.append(mmsi)
 	return names_of_the_ships,unknown_ships_mmsi
+
+def find_mmsi_per_type(type,path_of_the_database):
+		#extract information from the database
+		# database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
+		# 						).sheet_by_index(0).col_values(index_col_mmsi)]
+		# database_type = [t for t in xlrd.open_workbook(path_of_the_database
+	 	# 						).sheet_by_index(0).col_values(index_col_type)]
+		database_mmsi = xlrd.open_workbook(path_of_the_database).sheet_by_index(0).col_values(index_col_mmsi)
+		database_type = xlrd.open_workbook(path_of_the_database).sheet_by_index(0).col_values(index_col_type)
+		mmsi = {}
+		for y in type:
+			mmsi[y] = []
+			for i in range(0,len(database_type)):
+				if database_type[i] == y:
+					if database_mmsi[i] != '':
+						mmsi[y].append(database_mmsi[i])
+					else:
+						mmsi[y].append('No MMSI')
+		return mmsi
