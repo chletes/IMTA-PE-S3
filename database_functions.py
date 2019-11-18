@@ -123,21 +123,23 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 			unknown_ships_mmsi.append(mmsi)
 	return names_of_the_ships,unknown_ships_mmsi
 
-def find_mmsi_per_type(type,path_of_the_database):
+def find_mmsi_per_type(list_of_types,path_of_the_database):
 		#extract information from the database
 		# database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
 		# 						).sheet_by_index(0).col_values(index_col_mmsi)]
 		# database_type = [t for t in xlrd.open_workbook(path_of_the_database
 	 	# 						).sheet_by_index(0).col_values(index_col_type)]
-		database_mmsi = xlrd.open_workbook(path_of_the_database).sheet_by_index(0).col_values(index_col_mmsi)
-		database_type = xlrd.open_workbook(path_of_the_database).sheet_by_index(0).col_values(index_col_type)
+		database_mmsi = xlrd.open_workbook(path_of_the_database
+								).sheet_by_index(0).col_values(index_col_mmsi)
+		database_type = xlrd.open_workbook(path_of_the_database
+								).sheet_by_index(0).col_values(index_col_type)
 		mmsi = {}
-		for y in type:
-			mmsi[y] = []
+		for type_ in list_of_types:
+			mmsi[type_] = []
 			for i in range(0,len(database_type)):
-				if database_type[i] == y:
+				if database_type[i] == type_:
 					if database_mmsi[i] != '':
-						mmsi[y].append(database_mmsi[i])
+						mmsi[type_].append(database_mmsi[i])
 					else:
-						mmsi[y].append('No MMSI')
+						mmsi[type_].append('No MMSI')
 		return mmsi
