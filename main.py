@@ -84,6 +84,8 @@ def first_function():
 						n_mensajes123, n_mensajes5, n_lineas_malas = decode(real_filename, mensajes123, mensajes5)
 					print('Les fichiers avaient {0} messages de type 1, 2, ou 3 , {1} messages de type 5 et {2} messages undécodables.'.format(n_mensajes123, n_mensajes5, n_lineas_malas))
 					possibles_transbordements = find_transbordements(parametres, mensajes123)
+					with open('output.json', 'w') as outfile:
+						json.dump(possibles_transbordements, outfile)
 		except ValueError :
 			print("Choix incorrect ! Saisisez un numero aussi!")
 	 
