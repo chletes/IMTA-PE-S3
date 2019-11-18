@@ -1,1 +1,22 @@
-{"TYPE_BATEAUX": {"Yacht (Sailing)": 1, "ShiptypeLevel5": 0, "Yacht": 0, "Accommodation Vessel, Stationary": 1}, "TRANSBORDEMENTS": [{"VITESSE_MAXIMALE_NOEUDS": 5, "DISTANCE_MAXIMALE_KM": 0.1, "DELTATS_MAXIMALE": 5}], "GENERAL": [{"PATH": "../ais_rie_cerema_plouzane/", "DATABASE": "../ship_db_t.xlsx", "TEXT_EDITOR": "C:/Program Files/Notepad++/notepad++.exe"}]}
+{
+	"TYPE_BATEAUX": {
+		"Yacht (Sailing)": 1,
+		"ShiptypeLevel5": 0,
+		"Yacht": 0,
+		"Accommodation Vessel, Stationary": 1
+	},
+	"TRANSBORDEMENTS": [
+		{
+			"VITESSE_MAXIMALE_NOEUDS": 5,
+			"DISTANCE_MAXIMALE_KM": 0.1,
+			"DELTATS_MAXIMALE": 5
+		}
+	],
+	"GENERAL": [
+		{
+			"PATH": "../ais_rie_cerema_plouzane/",
+			"DATABASE": "../ship_db_t.xlsx",
+			"TEXT_EDITOR": "C:/Program Files/Notepad++/notepad++.exe"
+		}
+	]
+}
