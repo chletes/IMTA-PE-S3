@@ -7,6 +7,7 @@ WINDOWS 10
 
 - Install Python 3.8 from Windows Store
 - Run python on cmd to check if works
+- run python get-pip.py
 - Run pip on cmd to check if works
 - Run pip install geopy
 - Run pip install xlrd
