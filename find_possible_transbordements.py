@@ -11,13 +11,15 @@ def check_in_all_possible_transbordements(all_possible_transbordements, mmsi_a, 
 			return True, x
 	return False, -1
 
-def checkMMSI(bateaux, mmsi, goodBoats, badBoats):
-	#Checks if mmsi exists in the list of mmsi from DB
-	#goodBoats and badBoats are arrays that contain the mmsi that were already verified or discarded to not enter the bigger loop
-	#bateaux = lists of wanted boat types and mmsi
-	if(mmsi not in goodBoats):
+def checkMMSI(types_bateaux, mmsi, goodBoats, badBoats):
+	"""
+		Checks if mmsi exists in the list of mmsi from DB
+		goodBoats and badBoats are arrays that contain the mmsi that were already verified or discarded to not enter the bigger loop
+		types_bateaux = lists of wanted boat types and mmsi 
+	"""
+	if (mmsi not in goodBoats):
 		if(mmsi not in badBoats):
-			for type in bateaux:
+			for type in types_bateaux:
 				for ind in type:
 					if(mmsi == ind):
 						goodBoats[type] = mmsi

@@ -46,7 +46,7 @@ def get_parameters():
 					print("Error en el json")
 			archivo_entrada_abierto = True
 		except:
-			print("Erreur avec l'ouveture du fichier de configuration.")
+			print("Erreur avec l'ouverture du fichier de configuration.")
 	return config
 
 def ecriture_fichier_sortie(output_filename, output_path, possibles_transbordements):
