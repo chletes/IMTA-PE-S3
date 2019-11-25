@@ -55,7 +55,7 @@ def export_types_json(path_of_the_database):
 	json_file.close()
 	with open('./configuration/config.json', 'w') as outfile:
 		#print(config['TYPE_BATEAUX'])
-		json.dump(config, outfile)
+		json.dump(config, outfile, indent = 4)
 	return None
 
 def update_info_list_config(path_of_the_database):
