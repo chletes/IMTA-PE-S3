@@ -3,7 +3,7 @@
 __version__ = '0.1'
 __author__ = ''
 
-import json, subprocess
+import json, subprocess, datetime
 
 def lecture_fichier_configuration(text_editor, config_file):
 	with open(config_file) as json_file:
@@ -46,10 +46,10 @@ def get_parameters():
 					print("Error en el json")
 			archivo_entrada_abierto = True
 		except:
-			print("Erreur avec l'ouveture du fichier de configuration.")
+			print("Erreur avec l'ouverture du fichier de configuration.")
 	return config
 
-def ecriture_fichier_sortie(output_filename, output_path):
+def ecriture_fichier_sortie(output_filename, output_path, possibles_transbordements):
 
 	if output_filename == "":
 		now = datetime.datetime.today()
@@ -58,4 +58,4 @@ def ecriture_fichier_sortie(output_filename, output_path):
 		output_filename = "{0}{1}.json".format(output_path, output_filename)
 		
 	with open(output_filename, 'w') as outfile:
-		json.dump(possibles_transbordements, outfile)
+		json.dump(possibles_transbordements, outfile, indent = 4)

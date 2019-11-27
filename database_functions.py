@@ -55,8 +55,26 @@ def export_types_json(path_of_the_database):
 	json_file.close()
 	with open('./configuration/config.json', 'w') as outfile:
 		#print(config['TYPE_BATEAUX'])
+		json.dump(config, outfile, indent = 4)
+	return None
+
+def update_info_list_config(path_of_the_database):
+	column_name = []
+	excel = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)
+	json_file = open('./configuration/config.json','r')
+	config = json.load(json_file)
+	for i in range(excel.ncols):
+		column_name.append(excel.col_values(i)[0])
+	for t in column_name:
+		if t in config['WANTED_INFO'].keys():
+			continue
+		else:
+			config['WANTED_INFO'][t]=0
+	json_file.close()
+	with open('./configuration/config.json', 'w') as outfile:
 		json.dump(config, outfile)
 	return None
+
 
 def search_mmsi(message, path_of_the_database):
 	"""add the type of the ship to the message if the mmsi is in the database
@@ -124,6 +142,7 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 	return names_of_the_ships,unknown_ships_mmsi
 
 def find_mmsi_per_type(list_of_types,path_of_the_database):
+<<<<<<< HEAD
 	#extract information from the database
 	# database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
 	# 						).sheet_by_index(0).col_values(index_col_mmsi)]
@@ -166,4 +185,3 @@ def find_mmsi_per_type(list_of_types,path_of_the_database):
 					# collect all info in every needed column
 					infos_ships[type_][mmsi].append(dict_of_columns[k][i])
 	return infos_ships
-
