@@ -141,46 +141,44 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 			unknown_ships_mmsi.append(mmsi)
 	return names_of_the_ships,unknown_ships_mmsi
 
-def find_mmsi_per_type(list_of_types,path_of_the_database):
-	#extract information from the database
-	# database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
-	# 						).sheet_by_index(0).col_values(index_col_mmsi)]
-	# database_type = [t for t in xlrd.open_workbook(path_of_the_database
- 	# 						).sheet_by_index(0).col_values(index_col_type)]
-	# database_mmsi = xlrd.open_workbook(path_of_the_database
-	# 						).sheet_by_index(0).col_values(index_col_mmsi)
-	# database_type = xlrd.open_workbook(path_of_the_database
-	# 						).sheet_by_index(0).col_values(index_col_type)
-	# mmsi = {}
-	# for type_ in list_of_types:
-	# 	mmsi[type_] = []
-	# 	for i in range(0,len(database_type)):
-	# 		if database_type[i] == type_:
-	# 			if database_mmsi[i] != '':
-	# 				mmsi[type_].append(database_mmsi[i])
-	# 			else:
-	# 				mmsi[type_].append('No MMSI')
-	# return mmsi
-	#first extract the colums of the database needed from config.json
-	json_file = open('./configuration/config.json','r')
-	config = json.load(json_file)
-	all_columns_wanted = config['WANTED_INFO']
+def find_info_per_bateau(wanted_types,path_of_the_database, wanted_info):
+	"""select the information of the database according to the specifications
+	in config.json
+	@param wanted_info : a dictionnary whom keys are the name of the colums in
+	the database and which values are 0 or 1 (add the info in the end result)
+	@return
+	"""
 	#open the database
-	db = xlrd.open_workbook('../ShipData.xlsx').sheet_by_index(0)
-	n = db.nrows;
+	db = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)	
 	#collect all needed columns
-	dict_of_columns = {}
-	for i in range(0,n):
-		if all_columns_wanted[i]:
-			dict_of_columns[i] = db.col_values(i)
-	#extract the information we're looking for
-	infos_ships={}
-	for type_ in list_of_types:
-		infos_ships[type_]={}
-		for i in range(len(dict_of_columns[index_col_mmsi])):
-			if dict_of_columns[index_col_type][i] == type_:  # keep relevant type of ship
-				infos_ships[type_][mmsi]=[]
-				for k in range(len(dict_of_columns)):
-					# collect all info in every needed column
-					infos_ships[type_][mmsi].append(dict_of_columns[k][i])
-	return infos_ships
+	columns = {}
+	n = 0;
+	for i in wanted_info:
+		if wanted_info[i] == 1:
+			columns[i] = db.col_values(n)
+		n = n + 1
+	#print(columns)
+	#extract columns 
+	n = 0;
+	for k, v in columns.items():
+		n = [];
+		t = 0;
+		#print(k, v)
+		if k == "ShiptypeLevel5":
+			for p in v:
+				if p in wanted_types:
+					#print(p)
+					n.append(t)
+				t = t + 1;
+
+#print(n)
+
+	bateaux = {}
+	for t in n:
+		lene = len(bateaux)
+		bateaux[lene] = {}
+		for name,value in columns.items():
+			bateaux[lene][name] = value[t]
+	
+#print(bateaux)
+	return bateaux

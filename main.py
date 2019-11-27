@@ -88,6 +88,7 @@ def first_function():
 					possibles_transbordements = find_transbordements(parametres, mensajes123)
 					print("\nSucces ! {0} possibles transbordements trouvés.".format(len(possibles_transbordements)))
 					ecriture_fichier_sortie(parametres['GENERAL'][0]['OUTPUT_FILENAME'], parametres['GENERAL'][0]['OUTPUT_PATH'], possibles_transbordements)
+					
 					print("Appuyez la touche 'Enter' pour revenir au menu principal...")
 					input()
 					print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')

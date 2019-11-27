@@ -1,13 +1,19 @@
 from geopy.distance import great_circle
-from database_functions import find_mmsi_per_type
+from database_functions import find_info_per_bateau
 import time
 import os
 import json
 
 def check_in_all_possible_transbordements(all_possible_transbordements, mmsi_a, mmsi_b):
+	#print(all_possible_transbordements)
 	for x in range(0, len(all_possible_transbordements)):
-		#print(all_possible_transbordements[x]['MMSI Bateau A'])
-		if (all_possible_transbordements[x]['Information bateau A']['MMSI'] == mmsi_a and all_possible_transbordements[x]['Information bateau B']['MMSI'] == mmsi_b) or (all_possible_transbordements[x]['Information bateau A']['MMSI'] == mmsi_b and all_possible_transbordements[x]['Information bateau B']['MMSI'] == mmsi_a):
+		#print(x)
+		#print(all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'], mmsi_a, all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a)
+		#print(all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'], mmsi_b, all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b)
+		#print(all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'], mmsi_a, all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a)
+		#print(all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'], mmsi_b, all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b)
+		#input()
+		if (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a and all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b) or (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b and all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a):
 			return True, x
 	return False, -1
 
@@ -36,16 +42,18 @@ def find_transbordements(parametres, messages):
 	distance_maximale_km = parametres['TRANSBORDEMENTS'][0]['DISTANCE_MAXIMALE_KM']
 	vitesse_maximale_noeuds = parametres['TRANSBORDEMENTS'][0]['VITESSE_MAXIMALE_NOEUDS']
 	deltaTS_maximale = parametres['TRANSBORDEMENTS'][0]['DELTA_TIMESTAMP_ENTRE_MESSAGES_MAXIMALE']
+	
 	types_de_bateaux = []
 	diccionaire = parametres['TYPE_BATEAUX']
 	for n in diccionaire:
 		if diccionaire[n] == 1:
 			types_de_bateaux.append(n)
-
+	
 	print('Searching MMSI per TYPE...')
 
 	t0 = time.time()
-	bateaux = find_mmsi_per_type(types_de_bateaux,parametres['GENERAL'][0]['DATABASE'])
+	bateaux_filtres = find_info_per_bateau(types_de_bateaux,parametres['GENERAL'][0]['DATABASE'], parametres['WANTED_INFO'])
+	#print(bateaux_filtres)
 	t1 = time.time()
 	print('Finished in {0:.2f} seconds.'.format(t1-t0))
 	#print(types_de_bateaux)
@@ -85,11 +93,31 @@ def find_transbordements(parametres, messages):
 						if ((float(messages[x]['speed']) <= float(vitesse_maximale_noeuds)) and (float(messages[y]['speed']) <= float(vitesse_maximale_noeuds))):
 							#elements.append((messages[x], messages[y], distance,deltaTS))
 								possibles_transbordements_avec_LE_message.append((messages[y]['mmsi']))
+								#print(possibles_transbordements_avec_LE_message)
 								check, index = check_in_all_possible_transbordements(all_possible_transbordements, messages[x]['mmsi'], messages[y]['mmsi'])
 								#print(check)
 								if check == False:
-									info_A = {"MMSI": messages[x]['mmsi']}
-									info_B = {"MMSI": messages[y]['mmsi']}
+									info_A_has_been_changed = False
+									info_B_has_been_changed = False
+									for t in bateaux_filtres:
+										#print(messages[x]['mmsi'] == bateaux_filtres[t]['MaritimeMobileServiceIdentityMMSINumber'])
+										if messages[x]['mmsi'] == bateaux_filtres[t]['MaritimeMobileServiceIdentityMMSINumber']:
+											info_A = bateaux_filtres[t]
+											info_A_has_been_changed = True
+										if messages[y]['mmsi'] == bateaux_filtres[t]['MaritimeMobileServiceIdentityMMSINumber']:
+											info_B = bateaux_filtres[t]
+											info_B_has_been_changed = True
+									if not info_A_has_been_changed or not info_B_has_been_changed:
+										info_A = {}
+										info_A['MaritimeMobileServiceIdentityMMSINumber'] = messages[x]['mmsi']
+										info_A['MMSI present dans la BDD'] = False
+										info_B = {}
+										info_B['MaritimeMobileServiceIdentityMMSINumber'] = messages[y]['mmsi']
+										info_B['MMSI present dans la BDD'] = False
+									#print(info_A)
+									#print(info_B)
+									#info_A = {"MMSI": messages[x]['mmsi']}
+									#info_B = {"MMSI": messages[y]['mmsi']}
 									all_possible_transbordements[len(all_possible_transbordements)] = {"Information bateau A": info_A, "Information bateau B": info_B, "Rencontres":{0:{"Distance entre bateaux":distance, "Timestamp 1e message":messages[x]['Timestamp'], "Timestamp 2e message": messages[y]['Timestamp'], "Temps entre messages:":deltaTS}}}
 								else:
 									lene = len(all_possible_transbordements[index]['Rencontres'])
