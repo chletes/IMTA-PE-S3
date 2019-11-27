@@ -26,29 +26,45 @@ If it's modified in the database, modifify the global variables in accordance
 with those changes.
 
 """
+__all__ = []
+__version__ = 1.0
+__author__ = 'snal, carlos'
 
-__version__ = 0.2
-__author__ = 'snal'
-
-import xlrd
+#import xlrd
 import json
 import time
-all_searched_mmsi = {}  # reduce memory programm complexity for search_mmsi()
-						# by stocking all already searched mmsi :
-						# key : mmsi, value : type of the ship
-index_col_mmsi = 1
-index_col_name = 2
-index_col_type = 4
 
-#def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
+all_searched_mmsi = {}  # reduce memory programm complexity for search_mmsi()
+						# by stocking all already searched mmsi
+						# key : mmsi, value : type of the ship
+_index_col_mmsi = 1
+_index_col_name = 2
+_index_col_type = 4
+
+
 def export_types_json(path_of_the_database):
-	"""export the types from the database into config.json"""
+	"""export the types from the database into config.json
+
+	Ask the user whether he wants to :
+	- drop all registered types from the confiuration file which then add
+	new ones from  the database;
+	- or direcctly add all new types from the database.
+	This second choice will only add the types of ship which don't already
+	exist in the configuration file and left unchange all existing ones.
+	
+	Parameters :
+	path_of_the_database: path of the database from which the types are
+	extracted
+	"""
+	# open the configuration file
 	json_file = open('./configuration/config.json','r')
 	config = json.load(json_file)
+	# ask the user of its intention
 	choix = 0
 	while 1:
-		possibles_choix = { 0:"Effacer la liste des types de bateaux et ajouter les nouveaux. ",
-							1:"Mettre à jour les types de bateaux"}
+		possibles_choix = { 0:"Effacer la liste des types de bateaux et " +
+													"ajouter les nouveaux. ",
+							1:"Mettre a jour les types de bateaux"}
 
 		print("")
 		for q, a in possibles_choix.items():
@@ -63,41 +79,116 @@ def export_types_json(path_of_the_database):
 				print("Choix fait: {0}".format(possibles_choix[choix]))
 				if choix == 1:
 					break
-				if choix == 0:
+				if choix == 0:  # drop all known types written in config.json
 					config['TYPE_BATEAUX']={}
 		except:
 			pass
+	# add all unknown types from the database in config.json
 	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
-							).sheet_by_index(0).col_values(index_col_type)])
+							).sheet_by_index(0).col_values(_index_col_type)])
 	for t in types_u:
 		if t in config['TYPE_BATEAUX'].keys():
-			continue
+			continue  # let existing types unchanged
 		else:
 			config['TYPE_BATEAUX'][t]=0
+			# by default all new types won't be included in the relevant types
+			# for the search of transhipments
+	# close the config.json (it was in reading mode)
 	json_file.close()
+	# open config.json in writting mode
 	with open('./configuration/config.json', 'w') as outfile:
-		#print(config['TYPE_BATEAUX'])
 		json.dump(config, outfile, indent = 4)
 	return None
 
-def update_info_list_config(path_of_the_database):
-	column_name = []
-	excel = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)
+def update_wanted_info(path_of_the_database):
+	"""
+	update WANTED_INFO keys in the configuration file by using the column names
+	from the database
+
+	Parameters :
+	path_of_the_database: path of the database
+	 """
+	# open the configuration file
 	json_file = open('./configuration/config.json','r')
 	config = json.load(json_file)
+	# open the database
+	excel = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)
+	column_name = []
+	# extract the column names
 	for i in range(excel.ncols):
 		column_name.append(excel.col_values(i)[0])
+	# add them as key in config['WANTED_INFO']
 	for t in column_name:
 		if t in config['WANTED_INFO'].keys():
-			continue
+			continue  # already existing keys are left untouched
 		else:
 			config['WANTED_INFO'][t]=0
 	json_file.close()
+	# write all new changes
 	with open('./configuration/config.json', 'w') as outfile:
-		json.dump(config, outfile)
+		json.dump(config, outfile, indent = 4)
 	return None
 
 
+def find_info_per_bateau(wanted_types,path_of_the_database, wanted_info):
+	"""select the information of the database according to the specifications
+	in config.json
+
+	Parameters :
+	wanted_info : a dictionnary whom keys are the name of the colums in
+	the database and which values are 0 or 1 (add the info in the end result)
+	path_of_the_database : path of the database
+	wanted_types : contained all the types of ship that will be used to 
+	find the possible transhipment
+	return a dictionnary of dictionnaries containing all relevant ships and
+	their information, according to the specification in wanted_info
+	Example :	
+	{
+	"0" : {
+			"LRIMOShipNo": 12345467,
+			"ShipName": "ThisIsTheNameOfTheShip",
+			...
+		}
+	"1" : {
+			...
+		}
+	}
+	...
+	}
+	"""
+	#open the database
+	db = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)	
+	#collect all needed columns from the database
+	columns = {}
+	n = 0;
+	for i in wanted_info:
+		if wanted_info[i] == 1:
+			columns[i] = db.col_values(n)
+		n = n + 1
+	#memorize all index of ships we should check for transhipment
+	for name, value in columns.items():
+		n = [];
+		index = 0;
+		if name == "ShiptypeLevel5":  # focus on the column containing type
+			for type_ in value:
+				if type_ in wanted_types:  # keep types present in wanted_type
+					n.append(index)
+				index = index + 1;
+	# stock in a dictionnary all ships that should be checked for transhipment
+	# alongside their data that have been selected above
+	bateaux = {}
+	for t in n:
+		lene = len(bateaux)  # first key of the dictionnary
+		bateaux[lene] = {}  # bateaux is a dictionnary of dictionnaries
+		for name,value in columns.items():
+			# name is the same as the name of the columns in the database
+			# it is used as the second key
+			bateaux[lene][name] = value[t]
+	return bateaux
+
+###############################################################################
+#unused functions, may be usefull in some particular cases
+###############################################################################
 def search_mmsi(message, path_of_the_database):
 	"""add the type of the ship to the message if the mmsi is in the database
 	return true if operation is successful, false otherwise
@@ -110,9 +201,9 @@ def search_mmsi(message, path_of_the_database):
 	else:  # otherwise it's the first encounter with this mmsi
 		# extract information from the database
 		database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
-								).sheet_by_index(0).col_values(index_col_mmsi)]
+							  ).sheet_by_index(0).col_values(_index_col_mmsi)]
 		database_type = [t for t in xlrd.open_workbook(path_of_the_database
-								).sheet_by_index(0).col_values(index_col_type)]
+							  ).sheet_by_index(0).col_values(_index_col_type)]
 		# search for the mmsi in the database
 		try:
 			type_of_the_ship = database_type[database_mmsi.index(mmsi)]
@@ -130,11 +221,11 @@ def mmsi_in_database(mmsi):
 	"""
 	book = xlrd.open_workbook('../ShipData.xlsx')
 	db = book.sheet_by_index(0)
-	list_of_all_mmsi = db.col(index_col_mmsi)
+	list_of_all_mmsi = db.col(_index_col_mmsi)
 	try:
 		i = list_of_all_mmsi.index(mmsi)  # an exception may rise : ValueError
-		shiptype = db.col(index_col_type)
-		return shiptype[i]
+		shiptype = db.col(_index_col_type)[i]
+		return shiptype
 	except:
 		return False
 
@@ -146,61 +237,19 @@ def find_name_of_ships(list_of_mmsi, path_of_the_database):
 	"""
 	# only mmsi and names of ships are usefull here
 	database_mmsi = [t for t in xlrd.open_workbook(path_of_the_database
-							).sheet_by_index(0).col_values(index_col_mmsi)]
+							).sheet_by_index(0).col_values(_index_col_mmsi)]
 	database_name = [t for t in xlrd.open_workbook(path_of_the_database
-							).sheet_by_index(0).col_values(index_col_name)]
-	# creating the dictionnary and the list returned
+							).sheet_by_index(0).col_values(_index_col_name)]
+	# create the dictionnary and the list returned
 	names_of_the_ships = {}
 	unknown_ships_mmsi = []
-	# looking for the names of the ships
+	# look for the names of the ships
 	for mmsi in list_of_mmsi:
 		try:
 			names_of_the_ships[mmsi] = database_name[database_mmsi.index(
 																		mmsi)]
-			# index() raises a ValueError exception when no element correspon
-			# -ding to mmsi is found
+			# index() raises a ValueError exception when no element
+			# corresponding to mmsi is found
 		except:
 			unknown_ships_mmsi.append(mmsi)
 	return names_of_the_ships,unknown_ships_mmsi
-
-def find_info_per_bateau(wanted_types,path_of_the_database, wanted_info):
-	"""select the information of the database according to the specifications
-	in config.json
-	@param wanted_info : a dictionnary whom keys are the name of the colums in
-	the database and which values are 0 or 1 (add the info in the end result)
-	@return
-	"""
-	#open the database
-	db = xlrd.open_workbook(path_of_the_database).sheet_by_index(0)	
-	#collect all needed columns
-	columns = {}
-	n = 0;
-	for i in wanted_info:
-		if wanted_info[i] == 1:
-			columns[i] = db.col_values(n)
-		n = n + 1
-	#print(columns)
-	#extract columns 
-	n = 0;
-	for k, v in columns.items():
-		n = [];
-		t = 0;
-		#print(k, v)
-		if k == "ShiptypeLevel5":
-			for p in v:
-				if p in wanted_types:
-					#print(p)
-					n.append(t)
-				t = t + 1;
-
-#print(n)
-
-	bateaux = {}
-	for t in n:
-		lene = len(bateaux)
-		bateaux[lene] = {}
-		for name,value in columns.items():
-			bateaux[lene][name] = value[t]
-	
-#print(bateaux)
-	return bateaux
