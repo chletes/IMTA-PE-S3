@@ -43,10 +43,32 @@ index_col_type = 4
 #def export_types_json(path_of_the_database='../ship_db_t.xlsx'):
 def export_types_json(path_of_the_database):
 	"""export the types from the database into config.json"""
-	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
-							).sheet_by_index(0).col_values(index_col_type)])
 	json_file = open('./configuration/config.json','r')
 	config = json.load(json_file)
+	choix = 0
+	while 1:
+		possibles_choix = { 0:"Effacer la liste des types de bateaux et ajouter les nouveaux. ",
+							1:"Mettre à jour les types de bateaux"}
+
+		print("")
+		for q, a in possibles_choix.items():
+			print("{0}. {1}".format(q,a))
+		print("")
+		try:
+			choix = int(input("Entrez votre decision: "))
+			if choix not in [0,1]:
+				print("Choix incorrect !")
+				choix = 0
+			else:
+				print("Choix fait: {0}".format(possibles_choix[choix]))
+				if choix == 1:
+					break
+				if choix == 0:
+					config['TYPE_BATEAUX']={}
+		except:
+			pass
+	types_u = set([t for t in xlrd.open_workbook(path_of_the_database
+							).sheet_by_index(0).col_values(index_col_type)])
 	for t in types_u:
 		if t in config['TYPE_BATEAUX'].keys():
 			continue
