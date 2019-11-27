@@ -2286,13 +2286,13 @@
                 "Temps entre messages": 6.666666666666667e-05
             },
             "67": {
-                "Distance entre les bateaux": 0.05260794174520906,
+                "Distance entre les bateaux": 0.05260794174513088,
                 "Timestamp 1e message": 1567350388,
                 "Timestamp 2e message": 1567350395,
                 "Temps entre messages": 0.00011666666666666667
             },
             "68": {
-                "Distance entre les bateaux": 0.05260794174523024,
+                "Distance entre les bateaux": 0.05260794174515205,
                 "Timestamp 1e message": 1567350395,
                 "Timestamp 2e message": 1567350399,
                 "Temps entre messages": 6.666666666666667e-05
@@ -2878,7 +2878,7 @@
                 "Temps entre messages": 0.00016666666666666666
             },
             "4": {
-                "Distance entre les bateaux": 0.07434015331004679,
+                "Distance entre les bateaux": 0.0743401533100468,
                 "Timestamp 1e message": 1567350038,
                 "Timestamp 2e message": 1567350048,
                 "Temps entre messages": 0.00016666666666666666
@@ -3520,7 +3520,7 @@
                 "Temps entre messages": 0.00015
             },
             "111": {
-                "Distance entre les bateaux": 0.060070501740559286,
+                "Distance entre les bateaux": 0.06007050174055929,
                 "Timestamp 1e message": 1567350788,
                 "Timestamp 2e message": 1567350790,
                 "Temps entre messages": 3.3333333333333335e-05

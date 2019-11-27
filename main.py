@@ -1,21 +1,17 @@
 """Run this file to launch the software
 
-The current version works using a terminal. It should work under all OS.
-The file necessaire.txt contains all instructions to install specific libraries
-that are needed in the software.
+The current version works using a terminal and with all OS. 
 """
 
 __version__ = '0.1'
 __author__ = ''
 
 # libraries
-import os, platform
+import os
+import platform
 import json
-
-from geopy.distance import great_circle
-# files needed for the software
-###### f5ae2152d9a0f232a543fb38a5e82c2bbe82c5c0
 import pyAISm
+from geopy.distance import great_circle
 from decode import decode
 from find_possible_transbordements import find_transbordements, find_mmsi_in_message_type_5
 from json_functions import lecture_fichier_configuration, get_parameters, ecriture_fichier_sortie
@@ -24,12 +20,12 @@ from database_functions import export_types_json, search_mmsi
 
 def first_function():
 	"""Choix de l'utilisateur.
-		1. Retrouve dans la base de données "ShipData" tous les types de bateaux
-		   Puis demande à l'utilisateur si ses choix  de types sont	faits.
-		2. Accede au fichier de configuration pour changer les paramètres de 
-		   recherche des transbordements (chemins d'accès, vitesse maximale,
-		   distance maximale entre deux bateaux, etc.)
-		3. Lance le programme. 
+		1. 	Retrouve dans la base de données (définie dans ./configuration/config.json) 
+			pour mettre à jour la liste TYPE_BATEAUX (définie dans ./configuration/config.json)
+		2. 	Montre la configuration actuelle du logiciel. Pour les utilisateurs de Windows, 
+			il permet aussi de lancer l'éditeur par defaut pour modifier le fichier ./configuration/config.json
+		3. 	Cherche les transbordements entre les différents messages des fichiers du dossier INPUT_PATH 
+			(défini dans ./configuration/config.json)
 	"""
 	choix = 0;
 	SO = platform.system()
@@ -95,12 +91,6 @@ def first_function():
 					
 		except ValueError :
 			print("Choix incorrect ! Saisisez un numero aussi!")
-	 
-##############################################################################
-#tests
-##############################################################################
-
-
 
 parametres = {}
 parametres = get_parameters()
