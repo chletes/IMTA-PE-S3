@@ -1,38 +1,47 @@
 """This fill contains all functions related to the database
 
-The most important one for the software is export_types_json() :
-this function allowed to update the existing types of ships in config.json
+In this version There are 3 relevant functions for the software
+export_types_json() :
+this function allows to update the existing types of ships in config.json
 and thus allowed the software to work properly (given that the user has
 selected the types he wanted for the search)
+update_wanted_info() :
+this function allows to update the column names from the database in the config
+file. By default the new names are set to 0, which means the user must select
+them by setting them to 1 manually to change the ouput of the next function
+find_info_per_bateau() :
+This function search for all the ships which correspond to one of the type
+specified in config.json. It also extracts all their information from the
+database as specified in config.json.
+
 2 libraries are used :
 - xlrd, to read the database which is a .xlsx file (Excel),
 - json, for all treatments of config.json.
 See the respective documentations if necessary.
 
-There are 3 different functions looking for the type of the ships
-Use export_type_json if you want to update types in the config.json file
-Use search_mmsi(message) if you want to add the type of the ship to message
-Use mmsi_in_database(mmsi) if you want to get the type of a ship given its mmsi
+There are 3 unused functions at the end of the file. They can be used to look
+for the type of ships.
+Use search_mmsi(message) to add the type of the ship to message
+Use mmsi_in_database(mmsi) to get the type of a ship given its mmsi
+Use find_name_of_ships to get the ship type corresponding to a list of mmsi
+The last one can be used in conjonction with type 5 AIS message to verify if
+the given names are correct.
 
-The last functon looks for the names of ships, given a list of mmsi (usefull if
-used in conjonction with type 5 AIS message to verify if the name is correct)
-
-The following assumptions are made for the database
+>>> The following assumptions are made for the database <<<
 it's a .xlsx file with one sheet
 the first colonn contains the mmsi
 the third one, the names
 the fifth one, the types
 If it's modified in the database, modifify the global variables in accordance
 with those changes.
-
 """
+
 __all__ = []
 __version__ = 1.0
 __author__ = 'snal, carlos'
 
-#import xlrd
+import xlrd
 import json
-import time
 
 all_searched_mmsi = {}  # reduce memory programm complexity for search_mmsi()
 						# by stocking all already searched mmsi
@@ -184,6 +193,7 @@ def find_info_per_bateau(wanted_types,path_of_the_database, wanted_info):
 			# name is the same as the name of the columns in the database
 			# it is used as the second key
 			bateaux[lene][name] = value[t]
+		bateaux[lene]["ligne dans la base de données"] = t
 	return bateaux
 
 ###############################################################################
