@@ -27,9 +27,9 @@ def check_in_all_possible_transbordements(all_possible_transbordements, mmsi_a, 
 	Else it return False and -1
 	"""
 	for x in range(0, len(all_possible_transbordements)):
-		if (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a and
-		    all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b) or
-		   (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b and
+		if (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a and \
+		    all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b) or \
+		   (all_possible_transbordements[x]['Information bateau A']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_b and \
 		    all_possible_transbordements[x]['Information bateau B']['MaritimeMobileServiceIdentityMMSINumber'] == mmsi_a):
 		    # a previous meeting was found 
 			return True, x
@@ -92,16 +92,16 @@ def find_transbordements(parametres, messages):
 				# both message will be greater.
 				# What is done is to check a possible transhipment between them both
 				# with message2 from ship A and B, 
-				if ((messages[x]['mmsi'] != messages[y]['mmsi']) and
+				if ((messages[x]['mmsi'] != messages[y]['mmsi']) and \
 				    (messages[y]['mmsi'] not in possibles_transbordements_avec_LE_message)):
 					# calculate the distance between both ships in km
 					distance = great_circle(valladolid, salamanca).km
 					# and the elapsed time between both messages 
 					deltaTS = abs(messages[x]['Timestamp']-messages[y]['Timestamp'])/60000
-					if ((float(distance) <= float(distance_maximale_km)) and
+					if ((float(distance) <= float(distance_maximale_km)) and \
 						(deltaTS < deltaTS_maximale)):
 						# if those 2 data aren't too big, the speed is then checked
-						if ((float(messages[x]['speed']) <= float(vitesse_maximale_noeuds)) and
+						if ((float(messages[x]['speed']) <= float(vitesse_maximale_noeuds)) and \
 						    (float(messages[y]['speed']) <= float(vitesse_maximale_noeuds))):
 							# if both ships have a reasonnable speed
 							# then a a possible transhipment has been found
