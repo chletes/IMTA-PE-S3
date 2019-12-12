@@ -148,6 +148,10 @@ def find_transbordements(parametres, messages):
 								    		"Distance entre bateaux":distance, 
 								    		"Timestamp 1e message":messages[x]['Timestamp'], 
 								   			"Timestamp 2e message": messages[y]['Timestamp'], 
+								   			"Longitude Bateau A": messages[x]['lon'],
+											"Latitude Bateau A": messages[x]['lat'],
+											"Longitude Bateau B": messages[y]['lon'],
+											"Latitude Bateau B": messages[y]['lat'],
 								    		"Temps entre messages:":deltaTS
 								   		}
 								    }
@@ -160,6 +164,10 @@ def find_transbordements(parametres, messages):
 									"Distance entre les bateaux":distance,
 									"Timestamp 1e message":messages[x]['Timestamp'],
 									"Timestamp 2e message": messages[y]['Timestamp'], 
+									"Longitude Bateau A": messages[x]['lon'],
+									"Latitude Bateau A": messages[x]['lat'],
+									"Longitude Bateau B": messages[y]['lon'],
+									"Latitude Bateau B": messages[y]['lat'],
 									"Temps entre messages":deltaTS
 								}
 			except:
