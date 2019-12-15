@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Run this file to launch the software
 
 The current version works using a terminal 

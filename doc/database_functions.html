@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module database_functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>database_functions</strong></big></big> (version 1.0)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nals/IMT%20Atlantique/projetS3/IMTA-PE-S3/database_functions.py">/home/nals/IMT Atlantique/projetS3/IMTA-PE-S3/database_functions.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;fill&nbsp;contains&nbsp;all&nbsp;functions&nbsp;related&nbsp;to&nbsp;the&nbsp;database<br>
+&nbsp;<br>
+In&nbsp;this&nbsp;version&nbsp;There&nbsp;are&nbsp;3&nbsp;relevant&nbsp;functions&nbsp;for&nbsp;the&nbsp;software<br>
+export_types_json()&nbsp;:<br>
+this&nbsp;function&nbsp;allows&nbsp;to&nbsp;update&nbsp;the&nbsp;existing&nbsp;types&nbsp;of&nbsp;ships&nbsp;in&nbsp;config.json<br>
+and&nbsp;thus&nbsp;allowed&nbsp;the&nbsp;software&nbsp;to&nbsp;work&nbsp;properly&nbsp;(given&nbsp;that&nbsp;the&nbsp;user&nbsp;has<br>
+selected&nbsp;the&nbsp;types&nbsp;he&nbsp;wanted&nbsp;for&nbsp;the&nbsp;search)<br>
+update_wanted_info()&nbsp;:<br>
+this&nbsp;function&nbsp;allows&nbsp;to&nbsp;update&nbsp;the&nbsp;column&nbsp;names&nbsp;from&nbsp;the&nbsp;database&nbsp;in&nbsp;the&nbsp;config<br>
+file.&nbsp;By&nbsp;default&nbsp;the&nbsp;new&nbsp;names&nbsp;are&nbsp;set&nbsp;to&nbsp;0,&nbsp;which&nbsp;means&nbsp;the&nbsp;user&nbsp;must&nbsp;select<br>
+them&nbsp;by&nbsp;setting&nbsp;them&nbsp;to&nbsp;1&nbsp;manually&nbsp;to&nbsp;change&nbsp;the&nbsp;ouput&nbsp;of&nbsp;the&nbsp;next&nbsp;function<br>
+find_info_per_bateau()&nbsp;:<br>
+This&nbsp;function&nbsp;search&nbsp;for&nbsp;all&nbsp;the&nbsp;ships&nbsp;which&nbsp;correspond&nbsp;to&nbsp;one&nbsp;of&nbsp;the&nbsp;type<br>
+specified&nbsp;in&nbsp;config.json.&nbsp;It&nbsp;also&nbsp;extracts&nbsp;all&nbsp;their&nbsp;information&nbsp;from&nbsp;the<br>
+database&nbsp;as&nbsp;specified&nbsp;in&nbsp;config.json.<br>
+&nbsp;<br>
+2&nbsp;libraries&nbsp;are&nbsp;used&nbsp;:<br>
+-&nbsp;xlrd,&nbsp;to&nbsp;read&nbsp;the&nbsp;database&nbsp;which&nbsp;is&nbsp;a&nbsp;.xlsx&nbsp;file&nbsp;(Excel),<br>
+-&nbsp;json,&nbsp;for&nbsp;all&nbsp;treatments&nbsp;of&nbsp;config.json.<br>
+See&nbsp;the&nbsp;respective&nbsp;documentations&nbsp;if&nbsp;necessary.<br>
+&nbsp;<br>
+There&nbsp;are&nbsp;3&nbsp;unused&nbsp;functions&nbsp;at&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;file.&nbsp;They&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;look<br>
+for&nbsp;the&nbsp;type&nbsp;of&nbsp;ships.<br>
+Use&nbsp;search_mmsi(message)&nbsp;to&nbsp;add&nbsp;the&nbsp;type&nbsp;of&nbsp;the&nbsp;ship&nbsp;to&nbsp;message<br>
+Use&nbsp;mmsi_in_database(mmsi)&nbsp;to&nbsp;get&nbsp;the&nbsp;type&nbsp;of&nbsp;a&nbsp;ship&nbsp;given&nbsp;its&nbsp;mmsi<br>
+Use&nbsp;find_name_of_ships&nbsp;to&nbsp;get&nbsp;the&nbsp;ship&nbsp;type&nbsp;corresponding&nbsp;to&nbsp;a&nbsp;list&nbsp;of&nbsp;mmsi<br>
+The&nbsp;last&nbsp;one&nbsp;can&nbsp;be&nbsp;used&nbsp;in&nbsp;conjonction&nbsp;with&nbsp;type&nbsp;5&nbsp;AIS&nbsp;message&nbsp;to&nbsp;verify&nbsp;if<br>
+the&nbsp;given&nbsp;names&nbsp;are&nbsp;correct.<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;The&nbsp;following&nbsp;assumptions&nbsp;are&nbsp;made&nbsp;for&nbsp;the&nbsp;database&nbsp;&lt;&lt;&lt;<br>
+it's&nbsp;a&nbsp;.xlsx&nbsp;file&nbsp;with&nbsp;one&nbsp;sheet<br>
+the&nbsp;first&nbsp;colonn&nbsp;contains&nbsp;the&nbsp;mmsi<br>
+the&nbsp;third&nbsp;one,&nbsp;the&nbsp;names<br>
+the&nbsp;fifth&nbsp;one,&nbsp;the&nbsp;types<br>
+If&nbsp;it's&nbsp;modified&nbsp;in&nbsp;the&nbsp;database,&nbsp;modifify&nbsp;the&nbsp;global&nbsp;variables&nbsp;in&nbsp;accordance<br>
+with&nbsp;those&nbsp;changes.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="xlrd.html">xlrd</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = []</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">snal,&nbsp;carlos</td></tr></table>
+</body></html>

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 """This fill contains all functions related to the database
 
 In this version There are 3 relevant functions for the software

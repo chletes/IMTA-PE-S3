@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Decode the AIS messages
 
 The following function only keep the AIS messages usefull for the analysis of
@@ -14,6 +16,7 @@ lineas_malas = 0
 #mensajes123 = []
 #mensajes5 = []
 def decode(filename, mensajes123, mensajes5):
+    """look for the AIS messages that can be used by the software"""
     archivo_entrada_abierto = False
     cadena_vacia = ""
     cadena_salt0 = "\n"

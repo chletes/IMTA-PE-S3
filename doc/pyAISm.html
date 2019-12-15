@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module IMTA-PE-S3.pyAISm</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="IMTA-PE-S3.html"><font color="#ffffff">IMTA-PE-S3</font></a>.pyAISm</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nals/IMT Atlantique/projetS3/IMTA-PE-S3/pyAISm.py">/home/nals/IMT Atlantique/projetS3/IMTA-PE-S3/pyAISm.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;coding:&nbsp;latin-1<br>
+#&nbsp;A&nbsp;bunch&nbsp;of&nbsp;naive&nbsp;python&nbsp;functions&nbsp;to&nbsp;decode&nbsp;somes&nbsp;ais_data/AIVDM&nbsp;messages:<br>
+#&nbsp;try&nbsp;with&nbsp;!AIVDO,1,1,,,B00000000868rA6&lt;H7KNswPUoP06,0*6A<br>
+#&nbsp;doc&nbsp;:&nbsp;<a href="http://catb.org/gpsd/AIVDM.html">http://catb.org/gpsd/AIVDM.html</a><br>
+#################################################################################<br>
+#&nbsp;HOW&nbsp;TO&nbsp;USE&nbsp;IT&nbsp;:<br>
+#&nbsp;msg&nbsp;=&nbsp;'!AIVDO,1,1,,,B00000000868rA6&lt;H7KNswPUoP06,0*6A'&nbsp;<br>
+#&nbsp;ais_data&nbsp;=&nbsp;<a href="#-decod_ais">decod_ais</a>(msg)<br>
+#&nbsp;ais_format&nbsp;=&nbsp;<a href="#-format_ais">format_ais</a>(ais_data)<br>
+#&nbsp;print&nbsp;ais_data,&nbsp;ais_data['lon'],&nbsp;ais_format['lon']<br>
+#################################################################################</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>(<a href="exceptions.html#BaseException">exceptions.BaseException</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="IMTA-PE-S3.pyAISm.html#BadChecksumError">BadChecksumError</a>
+</font></dt><dt><font face="helvetica, arial"><a href="IMTA-PE-S3.pyAISm.html#UnrecognizedNMEAMessageError">UnrecognizedNMEAMessageError</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BadChecksumError">class <strong>BadChecksumError</strong></a>(<a href="exceptions.html#Exception">exceptions.Exception</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="IMTA-PE-S3.pyAISm.html#BadChecksumError">BadChecksumError</a></dd>
+<dd><a href="exceptions.html#Exception">exceptions.Exception</a></dd>
+<dd><a href="exceptions.html#BaseException">exceptions.BaseException</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><a name="BadChecksumError-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__init__">__init__</a>(...)&nbsp;initializes&nbsp;x;&nbsp;see&nbsp;help(type(x))&nbsp;for&nbsp;signature</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#BadChecksumError-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+<hr>
+Methods inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><a name="BadChecksumError-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__getitem__"><strong>__getitem__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__getitem__">__getitem__</a>(y)&nbsp;&lt;==&gt;&nbsp;x[y]</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__getslice__"><strong>__getslice__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__getslice__">__getslice__</a>(i,&nbsp;j)&nbsp;&lt;==&gt;&nbsp;x[i:j]<br>
+&nbsp;<br>
+Use&nbsp;of&nbsp;negative&nbsp;indices&nbsp;is&nbsp;not&nbsp;supported.</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__reduce__"><strong>__reduce__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="BadChecksumError-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="BadChecksumError-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#BadChecksumError-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<dl><dt><a name="BadChecksumError-__unicode__"><strong>__unicode__</strong></a>(...)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+</dl>
+<dl><dt><strong>args</strong></dt>
+</dl>
+<dl><dt><strong>message</strong></dt>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UnrecognizedNMEAMessageError">class <strong>UnrecognizedNMEAMessageError</strong></a>(<a href="exceptions.html#Exception">exceptions.Exception</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="IMTA-PE-S3.pyAISm.html#UnrecognizedNMEAMessageError">UnrecognizedNMEAMessageError</a></dd>
+<dd><a href="exceptions.html#Exception">exceptions.Exception</a></dd>
+<dd><a href="exceptions.html#BaseException">exceptions.BaseException</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><a name="UnrecognizedNMEAMessageError-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__init__">__init__</a>(...)&nbsp;initializes&nbsp;x;&nbsp;see&nbsp;help(type(x))&nbsp;for&nbsp;signature</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#UnrecognizedNMEAMessageError-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+<hr>
+Methods inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><a name="UnrecognizedNMEAMessageError-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__getitem__"><strong>__getitem__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__getitem__">__getitem__</a>(y)&nbsp;&lt;==&gt;&nbsp;x[y]</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__getslice__"><strong>__getslice__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__getslice__">__getslice__</a>(i,&nbsp;j)&nbsp;&lt;==&gt;&nbsp;x[i:j]<br>
+&nbsp;<br>
+Use&nbsp;of&nbsp;negative&nbsp;indices&nbsp;is&nbsp;not&nbsp;supported.</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__reduce__"><strong>__reduce__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#UnrecognizedNMEAMessageError-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<dl><dt><a name="UnrecognizedNMEAMessageError-__unicode__"><strong>__unicode__</strong></a>(...)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+</dl>
+<dl><dt><strong>args</strong></dt>
+</dl>
+<dl><dt><strong>message</strong></dt>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-compute_checksum"><strong>compute_checksum</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-decod_6bits_ascii"><strong>decod_6bits_ascii</strong></a>(bits)</dt></dl>
+ <dl><dt><a name="-decod_ais"><strong>decod_ais</strong></a>(msg)</dt><dd><tt>decode&nbsp;AIS&nbsp;messages,&nbsp;AIVDM/AIVDO&nbsp;sentences:<br>
+if&nbsp;the&nbsp;message&nbsp;is&nbsp;split&nbsp;to&nbsp;several&nbsp;lines,&nbsp;return&nbsp;a&nbsp;dict&nbsp;with&nbsp;'none'&nbsp;key&nbsp;as&nbsp;'empty'&nbsp;value<br>
+if&nbsp;the&nbsp;checksum&nbsp;doesn't&nbsp;correspond,&nbsp;raise&nbsp;an&nbsp;error<br>
+:param&nbsp;msg:&nbsp;(string)&nbsp;one&nbsp;AIS&nbsp;sentence&nbsp;&nbsp;'!AIVDO,1,1,,,B00000000868rA6&lt;H7KNswPUoP06,0*6A'<br>
+:return:&nbsp;(dict)&nbsp;ais_data&nbsp;:&nbsp;{'type':18,&nbsp;etc...}</tt></dd></dl>
+ <dl><dt><a name="-decod_data"><strong>decod_data</strong></a>(data)</dt></dl>
+ <dl><dt><a name="-decod_payload"><strong>decod_payload</strong></a>(payload)</dt></dl>
+ <dl><dt><a name="-decod_str"><strong>decod_str</strong></a>(data)</dt></dl>
+ <dl><dt><a name="-format_aid_type"><strong>format_aid_type</strong></a>(aid_type)</dt></dl>
+ <dl><dt><a name="-format_ais"><strong>format_ais</strong></a>(ais_base)</dt><dd><tt>format&nbsp;the&nbsp;ais_data&nbsp;database&nbsp;to&nbsp;a&nbsp;more&nbsp;user-friendly&nbsp;display<br>
+:param&nbsp;ais_base:&nbsp;(dict)&nbsp;the&nbsp;ais_data&nbsp;base&nbsp;to&nbsp;format<br>
+:return:&nbsp;(dict)&nbsp;ais_format&nbsp;:&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;the&nbsp;same&nbsp;kay&nbsp;as&nbsp;ais_data&nbsp;but&nbsp;other&nbsp;value,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;if&nbsp;ais_base&nbsp;is&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-format_assigned"><strong>format_assigned</strong></a>(assigned)</dt></dl>
+ <dl><dt><a name="-format_band"><strong>format_band</strong></a>(band)</dt></dl>
+ <dl><dt><a name="-format_coord"><strong>format_coord</strong></a>(coord_dec, Dir<font color="#909090">=''</font>)</dt><dd><tt>get&nbsp;position&nbsp;in&nbsp;decimal&nbsp;base&nbsp;and&nbsp;return&nbsp;a&nbsp;string&nbsp;with&nbsp;position&nbsp;in&nbsp;arc-base<br>
+:param&nbsp;coord_dec:&nbsp;(int)&nbsp;degree&nbsp;decimal&nbsp;coordinate&nbsp;43.29492333333334<br>
+:param&nbsp;Dir:&nbsp;(char)&nbsp;char&nbsp;to&nbsp;specify&nbsp;the&nbsp;direction&nbsp;like&nbsp;'N'&nbsp;for&nbsp;North.&nbsp;By&nbsp;default,&nbsp;nothing.<br>
+:return:&nbsp;(string)&nbsp;a&nbsp;degree,minute,second&nbsp;coordinate&nbsp;+&nbsp;direction&nbsp;&nbsp;43°17'41.7"N</tt></dd></dl>
+ <dl><dt><a name="-format_course"><strong>format_course</strong></a>(course)</dt></dl>
+ <dl><dt><a name="-format_cs"><strong>format_cs</strong></a>(cs)</dt></dl>
+ <dl><dt><a name="-format_day"><strong>format_day</strong></a>(day)</dt></dl>
+ <dl><dt><a name="-format_display"><strong>format_display</strong></a>(display)</dt></dl>
+ <dl><dt><a name="-format_dsc"><strong>format_dsc</strong></a>(dsc)</dt></dl>
+ <dl><dt><a name="-format_dte"><strong>format_dte</strong></a>(dte)</dt></dl>
+ <dl><dt><a name="-format_epfd"><strong>format_epfd</strong></a>(epfd)</dt></dl>
+ <dl><dt><a name="-format_heading"><strong>format_heading</strong></a>(heading)</dt></dl>
+ <dl><dt><a name="-format_hour"><strong>format_hour</strong></a>(hour)</dt></dl>
+ <dl><dt><a name="-format_lat"><strong>format_lat</strong></a>(lat)</dt></dl>
+ <dl><dt><a name="-format_lon"><strong>format_lon</strong></a>(lon)</dt></dl>
+ <dl><dt><a name="-format_minute"><strong>format_minute</strong></a>(minute)</dt></dl>
+ <dl><dt><a name="-format_month"><strong>format_month</strong></a>(month)</dt></dl>
+ <dl><dt><a name="-format_msg22"><strong>format_msg22</strong></a>(msg22)</dt></dl>
+ <dl><dt><a name="-format_second"><strong>format_second</strong></a>(second)</dt></dl>
+ <dl><dt><a name="-format_shiptype"><strong>format_shiptype</strong></a>(shiptype)</dt></dl>
+ <dl><dt><a name="-format_speed"><strong>format_speed</strong></a>(speed)</dt></dl>
+ <dl><dt><a name="-format_status"><strong>format_status</strong></a>(status)</dt></dl>
+ <dl><dt><a name="-format_turn"><strong>format_turn</strong></a>(rot)</dt></dl>
+ <dl><dt><a name="-get_checksum"><strong>get_checksum</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-get_msg_type"><strong>get_msg_type</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-get_payload"><strong>get_payload</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-get_sentence_count"><strong>get_sentence_count</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-get_sentence_number"><strong>get_sentence_number</strong></a>(msg)</dt></dl>
+ <dl><dt><a name="-is_auxiliary_craft"><strong>is_auxiliary_craft</strong></a>(mmsi)</dt></dl>
+ <dl><dt><a name="-sign_int"><strong>sign_int</strong></a>(s_bytes)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>format_list</strong> = {'aid_type': &lt;function format_aid_type&gt;, 'assigned': &lt;function format_assigned&gt;, 'band': &lt;function format_band&gt;, 'course': &lt;function format_course&gt;, 'cs': &lt;function format_cs&gt;, 'day': &lt;function format_day&gt;, 'display': &lt;function format_display&gt;, 'dsc': &lt;function format_dsc&gt;, 'dte': &lt;function format_dte&gt;, 'epfd': &lt;function format_epfd&gt;, ...}<br>
+<strong>globPayload</strong> = ''<br>
+<strong>logger</strong> = &lt;logging.Logger object&gt;</td></tr></table>
+</body></html>

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """This file contains the central function of the software
 
 Go through all AIS messages to check whether a possible transhipment may be

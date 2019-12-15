@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Read the configuration file
 """
 __version__ = '1.0'
